@@ -111,18 +111,18 @@ def matrix_to_tensor(matrix):
     shape = matrix_coo.shape
     return torch.sparse_coo_tensor(i, v, torch.Size(shape))
 
+def test_dataloader():
+    # dataloader test
+    test_dataset = 'iAF1260b'
+    test_split = 'train'
+    test_feature_size = 10
+    test_batch_size = 5
 
-# dataloader test
-test_dataset = 'iAF1260b'
-test_split = 'train'
-test_feature_size = 10
-test_batch_size = 5
+    hypergraph_dataset = Hypergraph(test_dataset, test_split, test_feature_size, test_batch_size)
+    dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
 
-hypergraph_dataset = Hypergraph(test_dataset, test_split, test_feature_size, test_batch_size)
-test_dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
-
-for _i, data in enumerate(test_dataloader):
-    print(f"Batch {_i + 1}:")
-    print(data)
-    if _i == 1:
-        break
+    for _i, data in enumerate(dataloader):
+        print(f"Batch {_i + 1}:")
+        print(data)
+        if _i == 1:
+            break

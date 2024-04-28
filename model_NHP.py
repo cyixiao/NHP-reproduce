@@ -1,5 +1,9 @@
 import torch
 import torch.nn as nn
+from torch.utils.data import DataLoader
+
+from dataloader import Hypergraph
+
 
 class NHP(nn.Module):
     def __init__(self, feature_size, hidden_size, g_func):
@@ -63,3 +67,27 @@ class NHP(nn.Module):
                     min_features[j, i] = torch.min(hyperlink_features)
 
         return max_features - min_features
+
+
+def test_nhp_model():
+    # define parameters
+    feature_size = 10
+    hidden_size = 4
+    g_func = 'mean'
+    dataset = 'iAF1260b'
+    split = 'train'
+    batch_size = 5
+
+    # initialize model
+    model = NHP(feature_size, hidden_size, g_func)
+    model.eval()
+
+    # load the dataset
+    hypergraph_dataset = Hypergraph(dataset, split, feature_size, batch_size)
+    dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
+
+    for i, data in enumerate(dataloader):
+        if i > 1:
+            break
+        output = model(data)
+        print(f"Batch {i + 1} output:", output)
