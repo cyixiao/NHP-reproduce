@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import scipy.sparse as sp
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 
 
 class Hypergraph(Dataset):
@@ -59,11 +59,11 @@ class Hypergraph(Dataset):
         end_index = self.batch[index + 1]
 
         return {
-            "batch_mask": self.pos_batch[start_index, end_index],
-            "pos_features": self.pos_features[start_index, end_index],
-            "neg_features": self.neg_features[start_index, end_index],
-            "pos_matrix": self.pos_matrix[start_index, end_index],
-            "neg_matrix": self.neg_matrix[start_index, end_index]
+            "batch_mask": self.pos_batch[start_index:end_index],
+            "pos_features": self.pos_features[start_index:end_index],
+            "neg_features": self.neg_features[start_index:end_index],
+            "pos_matrix": self.pos_matrix[start_index:end_index],
+            "neg_matrix": self.neg_matrix[start_index:end_index]
         }
 
     def __len__(self):
@@ -109,4 +109,20 @@ def matrix_to_tensor(matrix):
     i = torch.LongTensor(indices)
     v = torch.FloatTensor(values)
     shape = matrix_coo.shape
-    return torch.sparse.FloatTensor(i, v, torch.Size(shape))
+    return torch.sparse_coo_tensor(i, v, torch.Size(shape))
+
+
+# dataloader test
+test_dataset = 'iAF1260b'
+test_split = 'train'
+test_feature_size = 10
+test_batch_size = 5
+
+hypergraph_dataset = Hypergraph(test_dataset, test_split, test_feature_size, test_batch_size)
+test_dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
+
+for _i, data in enumerate(test_dataloader):
+    print(f"Batch {_i + 1}:")
+    print(data)
+    if _i == 1:
+        break
