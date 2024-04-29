@@ -14,24 +14,12 @@ def train(model, dataloader, epochs, device, lr):
         model.train()
         epoch_loss = 0.0
         for data in dataloader:
-            if torch.isnan(data['pos_features']).any() or torch.isnan(data['neg_features']).any():
-                print("NaN found in input data")
-                continue
-
             optimizer.zero_grad()
             outputs = model(data)
             pos_score = outputs['pos_score']
             neg_score = outputs['neg_score']
 
-            if torch.isnan(pos_score).any() or torch.isnan(neg_score).any():
-                print(f"NaN detected in model outputs. Stopping training.")
-                return
-
             loss = ranking_loss(pos_score, neg_score)
-
-            if torch.isnan(loss):
-                print("NaN detected in loss calculation. Stopping training.")
-                return
 
             loss.backward()
             optimizer.step()
