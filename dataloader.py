@@ -67,7 +67,7 @@ class Hypergraph(Dataset):
         }
 
     def __len__(self):
-        return len(self.batch) - 1
+        return len(self.batch) - 2
 
 
 def get_batch_mask(indices, batch_size):

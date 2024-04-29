@@ -85,7 +85,7 @@ def test_nhp_model():
     dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
 
     for i, data in enumerate(dataloader):
-        if i > 1:
+        if i == 1:
             break
         output = model(data)
         print(f"Batch {i + 1} output:", output)
