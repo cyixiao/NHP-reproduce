@@ -18,9 +18,7 @@ def train(model, dataloader, epochs, device, lr):
             outputs = model(data)
             pos_score = outputs['pos_score']
             neg_score = outputs['neg_score']
-
             loss = ranking_loss(pos_score, neg_score)
-
             loss.backward()
             optimizer.step()
             epoch_loss += loss.item()
