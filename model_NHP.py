@@ -48,23 +48,21 @@ class NHP(nn.Module):
     @staticmethod
     def _maxmin(batch, features):
         # max and min values
-        max_features = torch.full_like(features, float('-inf'))
-        min_features = torch.full_like(features, float('inf'))
+        num_hyperlinks = batch.size(1)
+        num_features = features.size(1)
 
-        # for each column of features
-        for i in range(features.size(1)):
-            # mask select to get relevant features
-            mask = torch.masked_select(features[:, i], batch.bool())
-            # count num of features in each hyperlink
-            count = batch.sum(1)
-            # get max min value for each hyperlink
-            for j in range(batch.size(0)):
-                start = int(torch.sum(count[:j]))
-                end = int(start + count[j])
-                if end > start:
-                    hyperlink_features = mask[start:end]
-                    max_features[j, i] = torch.max(hyperlink_features)
-                    min_features[j, i] = torch.min(hyperlink_features)
+        max_features = torch.full((num_hyperlinks, num_features), float('-inf'))
+        min_features = torch.full((num_hyperlinks, num_features), float('inf'))
+
+        for i in range(num_hyperlinks):
+            # get indices for this hyperlink
+            indices = (batch[:, i] == 1).nonzero(as_tuple=True)[0]
+
+            if indices.size(0) > 0:
+                # get elementwise max and min
+                hyperlink_features = features[indices, :]
+                max_features[i, :] = torch.max(hyperlink_features, dim=0).values
+                min_features[i, :] = torch.min(hyperlink_features, dim=0).values
 
         return max_features - min_features
 
@@ -72,8 +70,8 @@ class NHP(nn.Module):
 def test_nhp_model():
     # define parameters
     feature_size = 10
-    hidden_size = 4
-    g_func = 'mean'
+    hidden_size = 512
+    g_func = 'maxmin'
     dataset = 'iAF1260b'
     split = 'train'
     batch_size = 5
