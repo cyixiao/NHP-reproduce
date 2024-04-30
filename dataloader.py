@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 
 
 class Hypergraph(Dataset):
-    def __init__(self, dataset, split, feature_size, batch_size):
+    def __init__(self, dataset, split, batch_size):
         file_path = f"datasets/{dataset}/adjacency_matrix/indices.pkl"
         with open(file_path, 'rb') as file:
             indices_data = pickle.load(file)
@@ -14,9 +14,8 @@ class Hypergraph(Dataset):
         self.vertices_num = indices_data['vertices_num']
         self.hyperlinks_num = indices_data['hyperlinks_num']
 
-        # initialize vertices features
-        features = torch.zeros(self.vertices_num, feature_size)
-        torch.nn.init.xavier_normal_(features)
+        # load existing features
+        features = norm_feature(sp.load_npz(f"datasets/{dataset}/features.npz")).todense()
 
         # get indices for positive and negative
         pos_indices = indices_data[split + '_hyperedges_i']
@@ -87,7 +86,7 @@ def load_matrix(dataset, split, link):
 def load_features(features, indices):
     loaded_features = np.zeros((len(indices), features.shape[1]))
     for index, (_, vertex_index) in enumerate(indices):
-        loaded_features[index] = features[vertex_index].numpy()
+        loaded_features[index] = features[vertex_index]
     return torch.from_numpy(loaded_features).float()
 
 
@@ -111,14 +110,18 @@ def matrix_to_tensor(matrix):
     shape = matrix_coo.shape
     return torch.sparse_coo_tensor(i, v, torch.Size(shape))
 
+def norm_feature(features):
+    row_sums = np.array(features.sum(1)).flatten()
+    row_inv = sp.diags(1.0 / row_sums)
+    return row_inv.dot(features)
+
 def test_dataloader():
     # dataloader test
     test_dataset = 'iAF1260b'
     test_split = 'train'
-    test_feature_size = 10
     test_batch_size = 5
 
-    hypergraph_dataset = Hypergraph(test_dataset, test_split, test_feature_size, test_batch_size)
+    hypergraph_dataset = Hypergraph(test_dataset, test_split, test_batch_size)
     dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
 
     for _i, data in enumerate(dataloader):

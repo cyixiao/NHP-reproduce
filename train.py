@@ -1,9 +1,5 @@
 import torch
 from torch.optim import Adam
-from torch.utils.data import DataLoader
-
-from dataloader import Hypergraph
-from model_NHP import NHP
 
 
 def train(model, dataloader, epochs, device, lr):
@@ -37,26 +33,3 @@ def ranking_loss(pos_score, neg_score):
 def non_desc_func(x):
     # non-decreasing function for loss function: log(1 + exp(x))
     return torch.log1p(torch.exp(x))
-
-
-def test_train():
-    # define parameters
-    feature_size = 10
-    hidden_size = 512
-    g_func = 'maxmin'
-    dataset = 'iAF1260b'
-    split = 'train'
-    batch_size = 5
-    epochs = 5
-    learning_rate = 0.001
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # initialize model
-    model = NHP(feature_size, hidden_size, g_func)
-
-    # load the dataset
-    hypergraph_dataset = Hypergraph(dataset, split, feature_size, batch_size)
-    dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
-
-    trained_model = train(model, dataloader, epochs, device, learning_rate)
-    print(trained_model)
