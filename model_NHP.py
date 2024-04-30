@@ -81,7 +81,7 @@ def test_nhp_model():
     model.eval()
 
     # load the dataset
-    hypergraph_dataset = Hypergraph(dataset, split, feature_size, batch_size)
+    hypergraph_dataset = Hypergraph(dataset, split, batch_size)
     dataloader = DataLoader(hypergraph_dataset, batch_size=1, shuffle=False)
 
     for i, data in enumerate(dataloader):
