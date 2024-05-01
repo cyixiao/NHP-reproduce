@@ -23,11 +23,12 @@ def test_model(model, test_loader):
 
     # calculate AUC
     auc = roc_auc_score(labels, predictions)
-    print(f"AUC: {auc: .2f}")
+    # print(f"AUC: {auc: .2f}")
 
     # calculate Recall@k
     k = len(pos_scores) // 2
     top_k_indices = np.argsort(predictions)[::-1][:k]
     recall_at_k = np.sum(labels[top_k_indices]) / len(pos_scores)
-    print(f"Recall@k: {recall_at_k: .2f}")
-    print("Note: k is set to half of the number of positive scores")
+    # print(f"Recall@k: {recall_at_k: .2f}")
+    # print("Note: k is set to half of the number of positive scores")
+    return auc, recall_at_k

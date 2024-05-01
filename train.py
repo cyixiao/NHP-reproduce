@@ -16,7 +16,7 @@ def train(model, dataloader, epochs, device, lr):
             loss.backward()
             optimizer.step()
             epoch_loss += loss.item()
-        print(f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss/len(dataloader)}")
+        # print(f"Epoch {epoch + 1}/{epochs}, Loss: {epoch_loss/len(dataloader)}")
     return model
 
 
