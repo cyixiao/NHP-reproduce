@@ -26,7 +26,7 @@ def test_model(model, test_loader):
     # print(f"AUC: {auc: .2f}")
 
     # calculate Recall@k
-    k = len(pos_scores) // 2
+    k = len(neg_scores) // 2
     top_k_indices = np.argsort(predictions)[::-1][:k]
     recall_at_k = np.sum(labels[top_k_indices]) / len(pos_scores)
     # print(f"Recall@k: {recall_at_k: .2f}")
