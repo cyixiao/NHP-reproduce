@@ -37,7 +37,7 @@ class NHP(nn.Module):
         else:
             raise ValueError("invalid scoring function")
 
-        return {"pos_score": pos_score, "neg_score": neg_score}
+        return pos_score, neg_score
 
     @staticmethod
     def _mean(batch, features):

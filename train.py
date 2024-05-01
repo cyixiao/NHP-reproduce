@@ -11,9 +11,7 @@ def train(model, dataloader, epochs, device, lr):
         epoch_loss = 0.0
         for data in dataloader:
             optimizer.zero_grad()
-            outputs = model(data)
-            pos_score = outputs['pos_score']
-            neg_score = outputs['neg_score']
+            pos_score, neg_score = model(data)
             loss = ranking_loss(pos_score, neg_score)
             loss.backward()
             optimizer.step()

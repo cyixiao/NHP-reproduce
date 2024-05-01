@@ -7,7 +7,8 @@ from model_NHP import NHP
 from test import test_model
 from train import train
 
-dataset = 'iJO1366'
+# set parameters
+dataset = 'iAF1260b'
 feature_size = sp.load_npz(f"datasets/{dataset}/features.npz").shape[1]
 hidden_size = 512
 g_func = 'maxmin'
@@ -26,5 +27,8 @@ test_hypergraph = Hypergraph(dataset, "test", batch_size)
 train_data = DataLoader(train_hypergraph, batch_size=1, shuffle=False)
 test_data = DataLoader(test_hypergraph, batch_size=1, shuffle=False)
 
+# train NHP model
 trained_model = train(model, train_data, epochs, device, learning_rate)
-test_model(trained_model, test_data, device)
+
+# test trained model on metrics
+test_model(trained_model, test_data)
