@@ -18,8 +18,8 @@ The results of this experiment is summarized below. Each value represents the me
 | Scoring Function | Dataset   | AUC       | Recall@k  |
 |------------------|-----------|-----------|-----------|
 | mean             | iAF1260b  | 0.58 ± 0.01 | 0.29 ± 0.01 |
-| mean             | iJO1366   | 0.60 ± 0.01 | 0.29 ± 0.01 |
-| mean             | uspto     | 0.72 ± 0.01 | 0.36 ± 0.01 |
+|                  | iJO1366   | 0.60 ± 0.01 | 0.29 ± 0.01 |
+|                  | uspto     | 0.72 ± 0.01 | 0.36 ± 0.01 |
 | maxmin           | iAF1260b  | 0.64 ± 0.01 | 0.33 ± 0.01 |
-| maxmin           | iJO1366   | 0.65 ± 0.01 | 0.33 ± 0.01 |
-| maxmin           | uspto     | 0.90 ± 0.01 | 0.44 ± 0.00 |
+|                  | iJO1366   | 0.65 ± 0.01 | 0.33 ± 0.01 |
+|                  | uspto     | 0.90 ± 0.01 | 0.44 ± 0.00 |
