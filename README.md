@@ -3,6 +3,8 @@
 ## Overview
 This project aims to reproduce the results of the undirected case of the Neural Hypergraph Link Prediction (NHP) model, based on the research paper (https://dl.acm.org/doi/pdf/10.1145/3340531.3411870). My focus is on implementing the NHP model with two scoring functions, 'mean' and 'maxmin', as discussed in the paper, and evaluating their performance across multiple datasets.
 
+For a quick understanding of the paper, you can refer to my notes for this paper [NHP notes.pdf](./NHP%20notes.pdf).
+
 ## Datasets (Reactions of chemical reaction networks)
 - iAF1260b
 - iJO1366
